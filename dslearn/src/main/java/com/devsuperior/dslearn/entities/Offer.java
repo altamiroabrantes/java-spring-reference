@@ -1,15 +1,15 @@
 package com.devsuperior.dslearn.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,30 +17,30 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_course")
-public class Course implements Serializable {
+@Table(name = "tb_offer")
+public class Offer implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
-	private String imgUri;
-	private String imgGrayUri;
+	private String edition;
+	private Instant startMoment;
+	private Instant endMoment;
 	
-	@Getter
-	@OneToMany(mappedBy = "course")
-	private List<Offer> offers = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private Course course;
 	
-	public Course() {}
+	public Offer() {}
 
-	public Course(Long id, String name, String imgUri, String imgGrayUri) {
+	public Offer(Long id, String edition, Instant startMoment, Instant endMoment) {
 		super();
 		this.id = id;
-		this.name = name;
-		this.imgUri = imgUri;
-		this.imgGrayUri = imgGrayUri;
+		this.edition = edition;
+		this.startMoment = startMoment;
+		this.endMoment = endMoment;
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class Course implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Course other = (Course) obj;
+		Offer other = (Offer) obj;
 		return Objects.equals(id, other.id);
 	}
 	
