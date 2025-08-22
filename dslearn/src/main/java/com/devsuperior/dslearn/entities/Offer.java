@@ -28,11 +28,8 @@ public class Offer implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@SuppressWarnings("unused")
 	private String edition;
-	@SuppressWarnings("unused")
 	private Instant startMoment;
-	@SuppressWarnings("unused")
 	private Instant endMoment;
 	
 	@ManyToOne

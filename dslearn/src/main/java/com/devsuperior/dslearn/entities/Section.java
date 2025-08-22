@@ -1,11 +1,6 @@
- package com.devsuperior.dslearn.entities;
+package com.devsuperior.dslearn.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import com.devsuperior.dslearn.entities.enums.ResourceType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,10 +15,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_resource")
-public class Resource implements Serializable{
+@Table(name = "tb_section")
+public class Section  implements Serializable{
 	
-	private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,32 +27,34 @@ public class Resource implements Serializable{
 	private String description;
 	private Integer position;
 	private String imgUri;
-	private ResourceType type;
 	
 	@ManyToOne
-	@JoinColumn(name = "offer_id")
-	private Offer offer;
-
-	@OneToMany(mappedBy = "resource")
-	private List<Section> sections = new ArrayList<>();
-
+	@JoinColumn(name = "resource_id")
+	private Resource resource;
 	
-	public Resource() {}
+	@ManyToOne
+	@JoinColumn(name = "prerequisite_id")
+	private Section prerequisite;
+	
+	public Section() {}
 
-	public Resource(Long id, String title, String description, Integer position, String imgUri,
-			ResourceType type, Offer offer) {
+	public Section(Long id, String title, String description, Integer position, String imgUri, Resource resource,
+			Section prerequisite) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.position = position;
 		this.imgUri = imgUri;
-		this.type = type;
-		this.offer = offer;
+		this.resource = resource;
+		this.prerequisite = prerequisite;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -69,8 +65,13 @@ public class Resource implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Resource other = (Resource) obj;
-		return Objects.equals(id, other.id);
+		Section other = (Section) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
-	 
+	
 }
