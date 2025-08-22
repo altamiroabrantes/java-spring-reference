@@ -1,10 +1,9 @@
-package com.devsuperior.dslearn.entities;
+ package com.devsuperior.dslearn.entities;
 
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+
+import com.devsuperior.dslearn.entities.enums.ResourceType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,8 +18,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "tb_offer")
-public class Offer implements Serializable {
+@Table(name = "tb_resource")
+public class Resource implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -29,27 +27,31 @@ public class Offer implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@SuppressWarnings("unused")
-	private String edition;
+	private String title;
 	@SuppressWarnings("unused")
-	private Instant startMoment;
+	private String description;
 	@SuppressWarnings("unused")
-	private Instant endMoment;
+	private Integer position;
+	@SuppressWarnings("unused")
+	private String imgUri;
+	@SuppressWarnings("unused")
+	private ResourceType type;
 	
 	@ManyToOne
-	@JoinColumn(name = "course_id")
-	private Course course;
-	
-	@OneToMany(mappedBy = "offer")
-	private List<Resource> resources = new ArrayList<>(); 
-	
-	public Offer() {}
+	@JoinColumn(name = "offer_id")
+	private Offer offer;
 
-	public Offer(Long id, String edition, Instant startMoment, Instant endMoment) {
-		super();
+	public Resource() {}
+
+	public Resource(Long id, String title, String description, Integer position, String imgUri,
+			ResourceType type, Offer offer) {
 		this.id = id;
-		this.edition = edition;
-		this.startMoment = startMoment;
-		this.endMoment = endMoment;
+		this.title = title;
+		this.description = description;
+		this.position = position;
+		this.imgUri = imgUri;
+		this.type = type;
+		this.offer = offer;
 	}
 
 	@Override
@@ -65,8 +67,8 @@ public class Offer implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Offer other = (Offer) obj;
+		Resource other = (Resource) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+	 
 }
